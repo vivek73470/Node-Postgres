@@ -9,6 +9,7 @@ const authentication = (req, res, next) => {
         const removeBearer = token.split(' ')[1]
         const decode = verifytoken(removeBearer)
         if (decode) {
+            req.authUser = decoded;
             return next()
         } else {
             return res.status(400).json({ message: 'Invalid token' })
