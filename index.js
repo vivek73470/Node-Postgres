@@ -17,11 +17,16 @@ app.use(cors({
 
 app.use('/', AllRoutes)
 
-app.listen(PORT, async () => {
+const start = async () => {
     try {
         await connectDB();
-        console.log('Connected successfully from index.js')
+        app.listen(PORT, () => {
+            console.log(`Server started on port ${PORT}`);
+        })
     } catch (err) {
-        console.log('Failed to connect from index.js')
+        console.error('Failed to start server', err);
+        process.exit(1);
     }
-})
+}
+
+start();

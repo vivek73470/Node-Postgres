@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const { verifytoken } = require("../utils/jwt");
 
 const authentication = (req, res, next) => {
     try {
@@ -7,7 +7,7 @@ const authentication = (req, res, next) => {
             return res.status(400).json({ message: 'Token is required' })
         }
         const removeBearer = token.split(' ')[1]
-        const decode = jwt.verify(removeBearer, 'LearnDb')
+        const decode = verifytoken(removeBearer)
         if (decode) {
             return next()
         } else {

@@ -1,5 +1,5 @@
-const { findUserByEmail, createUser } = require("../../services/registerService/registerService")
-const bcrypt = require('bcrypt');
+const { findUserByEmail, createUser } = require("../../services/registerService/registerService");
+const { hashPassword } = require("../../utils/hash");
 
 
 const RegisterUser = async (req, res) => {
@@ -9,8 +9,8 @@ const RegisterUser = async (req, res) => {
         if (extingUser) {
             return res.status(400).json({ message: 'Email already Registered' })
         }
-        const saltRounds = 10;
-        const securePassword = await bcrypt.hash(password, saltRounds)
+        
+        const securePassword = await hashPassword(password);
         const user = await createUser({ email, firstName, lastName, password:securePassword })
         res.status(201).json({
             status: true,

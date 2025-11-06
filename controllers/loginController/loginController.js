@@ -1,10 +1,6 @@
 const { findUserByEmail } = require("../../services/loginService/loginService");
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
-
-const token = (loginData) => jwt.sign(
-    loginData, 'LearnDb', { expiresIn: '1h' }
-)
+const { comparePassword } = require("../../utils/hash");
+const { signToken } = require("../../utils/jwt");
 
 const LoginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -13,7 +9,7 @@ const LoginUser = async (req, res) => {
         if (!loginData) {
             return res.status(400).json({ message: "User not found" })
         }
-        const isMatch = await bcrypt.compare(password, loginData.password)
+        const isMatch = await comparePassword(password, loginData.password)
         if (!isMatch) {
             return res.status(401).json({ message: 'Invalid Password' })
         }
@@ -22,7 +18,7 @@ const LoginUser = async (req, res) => {
             status: true,
             message: "Login successful",
             data: loginData,
-            token: token({id:loginData._id,email:loginData.email})
+            token: signToken({id:loginData._id,email:loginData.email})
         });
 
     } catch (err) {
