@@ -1,20 +1,21 @@
-const { findUserByEmail, createUser } = require("../../services/authService/authService")
-
+const { findUserByEmail, createUser } = require("../../services/registerService/registerService")
+const bcrypt = require('bcrypt');
 
 
 const RegisterUser = async (req, res) => {
     try {
-        const { email, firstName, lastName } = req.body;
+        const { email, firstName, lastName, password } = req.body;
         const extingUser = await findUserByEmail(email)
         if (extingUser) {
             return res.status(400).json({ message: 'Email already Registered' })
         }
-        const user = await createUser({ email, firstName, lastName })
-        console.log(user,'created User')
+        const saltRounds = 10;
+        const securePassword = await bcrypt.hash(password, saltRounds)
+        const user = await createUser({ email, firstName, lastName, password:securePassword })
         res.status(201).json({
-            status:true,
+            status: true,
             message: "User registered successfully",
-            data:user,
+            data: user,
         });
     } catch (error) {
         console.error("Error registering user:", error);

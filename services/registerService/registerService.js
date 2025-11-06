@@ -1,5 +1,4 @@
-const  Register  = require("../../models/auth/register");
-
+const  Register  = require("../../models/register/register");
 
 const createUser = async (userData) => {
     const user = await Register.create(userData)
