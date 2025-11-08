@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const registerRoutes = require('./registerRoutes/registerRoutes')
-const loginRoutes = require('./loginRoutes/loginRoutes')
+const superRoutes = require('./superAdminRoutes/superAdminRoutes');
+const adminRoutes = require('./adminRoutes/adminRoutes')
 
-router.use('/admin', registerRoutes)
-router.use('/admin', loginRoutes)
+router.use('/superAdmin', superRoutes)
+router.use('/admin', adminRoutes)
+
 
 module.exports = router ;
